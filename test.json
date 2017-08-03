@@ -1,0 +1,20 @@
+{
+  "testDino": {
+    "name": "billy",
+    "level": 224,
+    "health": 10000,
+    "stamina": 2000,
+    "oxygen": 200,
+    "food": 500,
+    "weight": 900,
+    "melee": 300,
+    "speed": 150,
+    "torpor": 20300,
+    "species": "Ankylosaurus'",
+    "gender": "male",
+    "notes": "Test data, not a real dino",
+    "imprint": null,
+    "father": null,
+    "mother": null
+  }
+}

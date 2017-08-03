@@ -1,0 +1,28 @@
+{
+  "name": "arkapi",
+  "version": "1.0.0",
+  "description": "Services for tribe manager app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Nathan Marsh",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "btoa": "^1.1.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "guid": "0.0.12",
+    "mysql": "^2.14.0",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-discord": "^0.1.2",
+    "promise": "^8.0.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "tough-cookie": "^2.3.2",
+    "underscore": "^1.8.3"
+  }
+}
