@@ -1,10 +1,5 @@
 {
   "addTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
   "getAllTamedDinos":"SELECT * FROM TamedDinos",
-  "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?",
-  "insertUser": "INSERT IGNORE INTO Users(userId, username, accessToken, refreshToken) VALUES(?, ?, ?, ?)",
-  "updateUser": "UPDATE Users SET  username = ?, accessToken = ? WHERE userId = ?",
-  "updateUserWithRefresh": "UPDATE Users SET username = ?, accessToken = ?, refreshToken = ?, WHERE userId = ?",
-  "deleteUserTokens": "UPDATE Users SET refreshToken = NULL, accessToken = NULL WHERE userId = ?",
-  "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?"
+  "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?"
 }
