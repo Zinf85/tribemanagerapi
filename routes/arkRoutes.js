@@ -1,14 +1,19 @@
 'use strict';
 module.exports = function(app) {
   var dinos = require('../controllers/dinoController');
-  var auth = require('../controllers/authController')
 
   // todoList Routes
   app.route('/dinos')
     .get(dinos.getTamedDinos)
-    .post(dinos.addTamedDino);
+    .post(dinos.addOrUpdateTamedDino);
+  
+  app.route('/species')
+    .get(dinos.getSpecies)
+    .post(dinos.addOrUpdateSpecies);
 
-
+  app.route('/dinos/login')
+  .get(dinos.login);
+  
   app.route('/dinos/:dinoId')
     .get(dinos.getTamedDino)
     .put(dinos.updateTamedDino)
