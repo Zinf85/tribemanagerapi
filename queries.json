@@ -28,6 +28,7 @@
     "getUserGuilds": "SELECT * From UserGuilds WHERE userId = ?",
     "insertUserGuilds": "INSERT INTO UserGuilds (userId, guildId) VALUES ?",
     "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?",
-    "getUserGuilds": "SELECT Guilds.guildName, Users.username FROM UserGuilds INNER JOIN Guilds ON UserGuilds.guildId = Guilds.guildId INNER JOIN Users ON UserGuilds.userId = Users.userId AND Users.UserId = ?"
+    "adminGetUsersGuilds": "SELECT Guilds.guildName, Users.username FROM UserGuilds INNER JOIN Guilds ON UserGuilds.guildId = Guilds.guildId INNER JOIN Users ON UserGuilds.userId = Users.userId",
+    "getUser": "SELECT * FROM Users WHERE userId = ?" 
   }
 }

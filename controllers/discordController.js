@@ -46,10 +46,10 @@ exports.callback = function(req, res) {
           discord.insertOrUpdate(insertRequest).then(function(rsp) {
             var guildsRequest = auth.getGuildsRequest(getGuildsResponse);
             guild.insertAll(guildsRequest).then(function(guildsRsp) {
-              setTimeout(function(){
-                 res.redirect("https://nathanwmarsh.com/ark/tribemanagerdev/?discordToken=" + user.discordToken);
+              setTimeout(function() {
+                res.redirect(config.tribeManagerApp.url + "?discordToken=" + user.discordToken);
               }, rateDelay);
-             
+
             }, function(err) {
               res.status(500).send({
                 error: 'Failed insert'
@@ -90,7 +90,21 @@ exports.getUser = function(req, res) {
           guild.insertUserGuilds(auth.getUserGuildsRequest(userRspObj.id, guildRsp)).then(function(userGuildsRsp) {
             var user = userModel.createUser(userRspObj.id, userRspObj.username,
               token, userModel.isInGuild(guildRsp));
-            res.json(user);
+            var userReq = {
+              user: user
+            }
+            userModel.getUser(userReq).then(function(dbUserRsp) {
+              if (dbUserRsp.length == 1) {
+                user.isSuperUser = dbUserRsp[0].isSuperUser == 1;
+              }
+
+              res.json(user);
+            }, function(err) {
+              res.status(500).send({
+                error: 'Failed lookup'
+              });
+            });
+
           }, function(err) {
             res.status(500).send({
               error: 'Failed insert'
@@ -117,4 +131,39 @@ exports.getUser = function(req, res) {
     res.send('error getting guilds');
   });
 
+}
+
+exports.adminGetGuilds = function(req, res) {
+  var token = req.query.discordToken;
+  setTimeout(function(){
+     auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
+      setTimeout(function() {
+        auth.getUserPromise(token).then(function(userRsp) {
+          var request = {
+            user: JSON.parse(userRsp)
+          }
+          guild.adminGetGuilds(request).then(function(usersGuildsRsp) {
+            res.json(usersGuildsRsp);
+          }, function(err) {
+            res.status(err.statusCode);
+            res.send('error getting guilds');
+          })
+        }, function(err) {
+          res.status(err.statusCode);
+          res.send('error getting guilds');
+        })
+      }, rateDelay)
+
+    }
+  }, function(err) {
+    res.status(err.statusCode);
+    res.send('error getting users guilds');
+  });
+  }, rateDelay);
+ 
+}
+
+function isAuthorized(guildRsp) {
+  return userModel.isInGuild(guildRsp);
 }

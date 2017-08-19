@@ -1,14 +1,40 @@
 'user strict';
 var fs = require('fs');
 var _ = require('underscore');
+var db = require('../db');
+var Promise = require('promise');
+var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).auth;
 
-exports.createUser = function(userId, username, accessToken, inGuild){
+exports.createUser = function(userId, username, accessToken, inGuild) {
   return {
     userId: userId,
     username: username,
     discordToken: accessToken,
-    inGuild: inGuild
+    inGuild: inGuild,
+    isSuperUser: false
   }
+}
+
+exports.getUser = function(request) {
+  var promise = new Promise(function(resolve, reject) {
+    var id = request.user.userId ? request.user.userId : request.user.id;
+    if (id) {
+      var values = [id];
+      db.get().query(queries.getUser, values, function(err, result) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
+        console.log('Retrieval successful');
+        resolve(result);
+      });
+    } else {
+      reject('no id');
+    }
+
+  });
+
+  return promise;
 }
 
 exports.isInGuild = function(guildsResponse) {

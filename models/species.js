@@ -5,44 +5,22 @@ var fs = require('fs');
 var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).dinos;
 var _ = require('underscore');
 
-exports.addOrUpdate = function(request, user) {
-//   var promise = new Promise(function(resolve, reject) {
-//     var dino = request.dino;
-//     var tribeId = request.tribeId;
-//     var userId = user.userId;
-//     var dinoId = dino.id ? dino.id : guid.create().value;
-//     var values = [dinoId, dino.name, dino.level, dino.health,
-//       dino.stamina, dino.oxygen, dino.food, dino.weight,
-//       dino.melee, dino.speed, dino.torpor, dino.species,
-//       dino.gender, dino.notes, dino.imprint, dino.father,
-//       dino.mother, userId, tribeId, dino.status,
-//       dino.name, dino.level, dino.health,
-//       dino.stamina, dino.oxygen, dino.food, dino.weight,
-//       dino.melee, dino.speed, dino.torpor, dino.species,
-//       dino.gender, dino.notes, dino.imprint, dino.father,
-//       dino.mother, userId, tribeId, dino.status
-//     ];
+exports.addSpecies= function(request, user) {
+  var promise = new Promise(function(resolve, reject) {
+    var species = request.species;
+    var values = [species.name, species.type];
 
-//     db.get().query(queries.addOrUpdateTamedDino, values, function(err, result) {
-//       if (err) {
-//         console.log(err);
-//         reject(err);
-//       }
-//       console.log('Insert or update successful');
-//       db.get().query(queries.getDinoById, [dinoId], function(err2, result2) {
-//         if (err2) {
-//           console.log(err2);
-//           reject(err2);
-//         }
-//         console.log(result2);
-//         resolve(result2);
-        
-//       });
+    db.get().query(queries.addSpecies, values, function(err, result) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
 
-//     });
-//   });
+    });
+  });
 
-//   return promise;
+  return promise;
 }
 
 exports.getAll = function() {

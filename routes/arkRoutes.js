@@ -27,6 +27,9 @@ module.exports = function(app) {
 
   app.route('/discord/getGuilds')
     .get(discord.getGuilds)
+  
+    app.route('/discord/adminGetGuilds')
+    .get(discord.adminGetGuilds)
 
 
   app.route('/discord/callback')

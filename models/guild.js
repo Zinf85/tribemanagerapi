@@ -4,6 +4,7 @@ var Promise = require('promise');
 var fs = require('fs');
 var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).auth;
 var _ = require('underscore');
+var userModel = require('./userModel');
 
 exports.insertAll = function(request) {
   var promise = new Promise(function(resolve, reject) {
@@ -60,13 +61,34 @@ exports.insertUserGuilds = function(request) {
           resolve(result2);
         });
       } else {
-          resolve(result);
+        resolve(result);
       }
-    
+
 
 
     });
   });
 
+  return promise;
+}
+
+exports.adminGetGuilds = function(request) {
+  var promise = new Promise(function(resolve, reject) {
+    userModel.getUser(request).then(function(rsp) {
+      if (rsp.length === 1 && rsp[0].isSuperUser) {
+          db.get().query(queries.adminGetUsersGuilds, function(err, result) {
+
+               if(err){
+                 reject(err);
+               }
+            resolve(result);
+          });
+      } else {
+        reject('something went wrong');
+      }
+    }, function(err){
+      reject(err);
+    });
+  });
   return promise;
 }

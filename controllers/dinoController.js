@@ -18,7 +18,7 @@ var auth = require('../models/auth');
 
 exports.getTamedDinos = function(req, res) {
   auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
-    if (isAuthorized) {
+    if (isAuthorized(guildRsp)) {
       tamedDino.getAll().then(function(rsp) {
         species.getAll().then(function(speciesRsp) {
           var data = {
@@ -114,6 +114,29 @@ exports.deleteTamedDino = function(req, res) {
     }
   }, function(err) {
     response.error(err, res);
+  });
+}
+
+exports.addSpecies = function(req, res) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
+      var request = {
+        species: req.body.species
+      }
+      species.addSpecies(request).then(function(rsp) {
+          res.json(rsp);
+      }, function(err) {
+        res.status(500).send({
+          error: err
+        });
+      });
+    } else {
+       res.redirect(config.tribeManagerApp.url + '/login');
+    }
+  }, function(err) {
+    res.status(500).send({
+      error: err
+    });
   });
 }
 
