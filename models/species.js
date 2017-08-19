@@ -2,7 +2,7 @@ var db = require('../db');
 var guid = require('guid');
 var Promise = require('promise');
 var fs = require('fs');
-var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8'));
+var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).dinos;
 var _ = require('underscore');
 
 exports.addOrUpdate = function(request, user) {

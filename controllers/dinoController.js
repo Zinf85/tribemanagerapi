@@ -6,23 +6,23 @@ var userModel = require('../models/userModel');
 var requestPromise = require('request-promise');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var helpers = require('../utils/helpers');
+var auth = require('../models/auth');
 
-exports.login = function(req, res) {
-  loginPromise().then(function(response) {
-    console.log(response);
-    res.json(response);
-  });
-};
+// exports.login = function(req, res) {
+//   loginPromise().then(function(response) {
+//     console.log(response);
+//     res.json(response);
+//   });
+// };
 
 exports.getTamedDinos = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
-    console.log(userResponse);
-    if (isAuthorized(userResponse)) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized) {
       tamedDino.getAll().then(function(rsp) {
         species.getAll().then(function(speciesRsp) {
           var data = {
             dinos: rsp,
-            user: getObject(userResponse),
             species: speciesRsp
           }
           res.json(data);
@@ -47,12 +47,11 @@ exports.getTamedDinos = function(req, res) {
 }
 
 exports.addOrUpdateTamedDino = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
-    if (isAuthorized(userResponse)) {
-      tamedDino.addOrUpdate(req.body, getObject(userResponse)).then(function(rsp) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
+      tamedDino.addOrUpdate(req.body).then(function(rsp) {
         var data = {
-          dinos: rsp,
-          user: getObject(userResponse)
+          dinos: rsp
         }
         res.json(data);
       }, function(err) {
@@ -68,8 +67,8 @@ exports.addOrUpdateTamedDino = function(req, res) {
 }
 
 exports.getTamedDino = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
-    if (isAuthorized(userResponse)) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
       tamedDino.getById(req.params.dinoId).then(function(rsp) {
         var data = {
           dinos: rsp
@@ -87,8 +86,8 @@ exports.getTamedDino = function(req, res) {
 }
 
 exports.updateTamedDino = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
-    if (isAuthorized(userResponse)) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
       tamedDino.update(req.params.dinoId, req.body).then(function(rsp) {
         res.json({});
       }, function(err) {
@@ -103,8 +102,8 @@ exports.updateTamedDino = function(req, res) {
 }
 
 exports.deleteTamedDino = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
-    if (isAuthorized(userResponse)) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
       tamedDino.delete(req.params.dinoId).then(function(rsp) {
         res.json({});
       }, function(err) {
@@ -119,13 +118,13 @@ exports.deleteTamedDino = function(req, res) {
 }
 
 exports.getSpecies = function(req, res) {
-  getUserPromise(req.query.discordToken).then(function(userResponse) {
+  auth.getUserPromise(req.query.discordToken).then(function(userResponse) {
     console.log(userResponse);
     if (isAuthorized(userResponse)) {
       species.getAll().then(function(rsp) {
         var data = {
           species: rsp,
-          user: getObject(userResponse)
+          user: helpers.getObject(userResponse)
         }
         res.json(data);
       }, function(err) {
@@ -146,30 +145,7 @@ exports.addOrUpdateSpecies = function(req, res) {
 
 }
 
-function loginPromise() {
-  var loginRequest = {
-    method: 'GET',
-    uri: config.authService.url + '/discord/login'
-  }
-  return requestPromise(loginRequest);
-}
 
-function getUserPromise(token) {
-  var getUserRequest = {
-    method: 'GET',
-    uri: config.authService.url + '/discord/getUser?discordToken=' + token,
-  }
-  return requestPromise(getUserRequest);
-}
-
-function getObject(response) {
-  if ((typeof response) === 'string') {
-    return JSON.parse(response);
-  }
-  return response;
-}
-
-function isAuthorized(userResponse) {
-  var user = JSON.parse(userResponse);
-  return user.inGuild;
+function isAuthorized(guildRsp) {
+  return userModel.isInGuild(guildRsp);
 }
