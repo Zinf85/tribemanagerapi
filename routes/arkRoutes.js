@@ -2,23 +2,29 @@
 module.exports = function(app) {
   var dinos = require('../controllers/dinoController');
   var discord = require('../controllers/discordController');
+   var generators = require('../controllers/generatorsController');
 
-  // dino Routes
+  // DINOS
   app.route('/dinos')
     .get(dinos.getTamedDinos)
     .post(dinos.addOrUpdateTamedDino);
-
-  app.route('/species')
-    .get(dinos.getSpecies)
-    .post(dinos.addBatchSpecies);
 
   app.route('/dinos/:dinoId')
     .get(dinos.getTamedDino)
     .put(dinos.updateTamedDino)
     .delete(dinos.deleteTamedDino);
+  //Species
+    app.route('/species')
+    .get(dinos.getSpecies)
+    .post(dinos.addBatchSpecies);
 
+  //GENERATORS
+    app.route('/generators')
+    .get(generators.getGenerators)
+    .post(generators.addOrUpdateGenerator)
+    .put(generators.fillGenerator);
 
-  //Auth routes
+  //DISCORD
   app.route('/discord/login')
     .get(discord.login);
 

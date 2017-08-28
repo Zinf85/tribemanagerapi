@@ -1,7 +1,7 @@
 {
   "dinos": {
     "addTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    "addOrUpdateTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee = ?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, updatedby = ?, tribe = ?, status =?",
+    "addOrUpdateTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe, status, datemodified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee = ?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, updatedby = ?, tribe = ?, status =?, datemodified = ?",
     "getAllTamedDinos": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby",
     "getDinoById": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby WHERE TamedDinos.id = ?",
     "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?",
@@ -19,6 +19,12 @@
     "getAllSpecies": "SELECT * FROM Species",
     "addSpecies": "INSERT INTO Species (name, type) VALUES (?, ?)",
     "addBatchSpecies": "INSERT INTO Species (name, type) VALUES ?"
+  },
+  "generators":{
+    "getAllGenerators": "SELECT Generators.*, Users.username FROM Generators LEFT JOIN Users On Users.userId=Generators.filledBy",
+    "addOrUpdateGenerator": "INSERT INTO Generators (id, name, server, count, filledBy, fillDate) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, server = ?, count = ?",
+    "fillGenerator": "UPDATE Generators SET filledBy = ?, fillDate = ? WHERE id = ?",
+    "getGeneratorById": "SELECT Generators.*, Users.username FROM Generators LEFT JOIN Users On Users.userId=Generators.filledBy WHERE Generators.id = ?"
   },
   "auth": {
     "insertUser": "INSERT IGNORE INTO Users(userId, username, accessToken, refreshToken) VALUES(?, ?, ?, ?)",
