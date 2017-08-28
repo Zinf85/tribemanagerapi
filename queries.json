@@ -11,11 +11,14 @@
     "deleteUserTokens": "UPDATE Users SET refreshToken = NULL, accessToken = NULL WHERE userId = ?",
     "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?",
     "getUsersJoinTamedDinos": "SELECT Users.username, Users.userId FROM Users INNER JOIN TamedDinos On TamedDinos.addedby=Users.userId",
-    "getAllSpecies": "SELECT * FROM Species",
     "addTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    "getAllTamedDinos": "SELECT * FROM TamedDinos",
+    "getAllTamedDinos": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby",
     "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?"
-
+  },
+  "species": {
+    "getAllSpecies": "SELECT * FROM Species",
+    "addSpecies": "INSERT INTO Species (name, type) VALUES (?, ?)",
+    "addBatchSpecies": "INSERT INTO Species (name, type) VALUES ?"
   },
   "auth": {
     "insertUser": "INSERT IGNORE INTO Users(userId, username, accessToken, refreshToken) VALUES(?, ?, ?, ?)",
@@ -29,6 +32,6 @@
     "insertUserGuilds": "INSERT INTO UserGuilds (userId, guildId) VALUES ?",
     "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?",
     "adminGetUsersGuilds": "SELECT Guilds.guildName, Users.username FROM UserGuilds INNER JOIN Guilds ON UserGuilds.guildId = Guilds.guildId INNER JOIN Users ON UserGuilds.userId = Users.userId",
-    "getUser": "SELECT * FROM Users WHERE userId = ?" 
+    "getUser": "SELECT * FROM Users WHERE userId = ?"
   }
 }

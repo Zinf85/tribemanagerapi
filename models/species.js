@@ -2,7 +2,7 @@ var db = require('../db');
 var guid = require('guid');
 var Promise = require('promise');
 var fs = require('fs');
-var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).dinos;
+var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8')).species;
 var _ = require('underscore');
 
 exports.addSpecies= function(request, user) {
@@ -11,6 +11,29 @@ exports.addSpecies= function(request, user) {
     var values = [species.name, species.type];
 
     db.get().query(queries.addSpecies, values, function(err, result) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(result);
+
+    });
+  });
+
+  return promise;
+}
+
+exports.addBatchSpecies= function(request, user) {
+  var promise = new Promise(function(resolve, reject) {
+    var species = request.species;
+    var temp = [];
+    species.forEach(function(spec){
+      var val = [spec.name, spec.type];
+      temp.push(val);
+    });
+   // var values = [species.name, species.type];
+console.log(temp);
+    db.get().query(queries.addBatchSpecies, [temp], function(err, result) {
       if (err) {
         console.log(err);
         reject(err);

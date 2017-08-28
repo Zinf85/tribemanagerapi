@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   app.route('/species')
     .get(dinos.getSpecies)
-    .post(dinos.addOrUpdateSpecies);
+    .post(dinos.addBatchSpecies);
 
   app.route('/dinos/:dinoId')
     .get(dinos.getTamedDino)

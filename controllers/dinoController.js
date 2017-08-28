@@ -164,6 +164,14 @@ exports.getSpecies = function(req, res) {
   });
 }
 
+exports.addBatchSpecies = function(req, res){
+  console.log(req.body);
+  species.addBatchSpecies(req.body).then(function(rsp){
+    console.log(rsp);
+    res.json(rsp);
+  });
+}
+
 exports.addOrUpdateSpecies = function(req, res) {
 
 }
