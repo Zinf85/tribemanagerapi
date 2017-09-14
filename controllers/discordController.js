@@ -82,6 +82,7 @@ exports.getGuilds = function(req, res) {
 exports.getUser = function(req, res) {
   var token = req.query.discordToken;
   auth.getGuildsPromise(token).then(function(guildRsp) {
+    console.log(guildRsp);
     setTimeout(function() {
       auth.getUserPromise(token).then(function(userRsp) {
         console.log(userRsp);

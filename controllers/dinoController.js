@@ -18,6 +18,7 @@ var auth = require('../models/auth');
 
 exports.getTamedDinos = function(req, res) {
   auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    console.log(guildRsp);
     if (isAuthorized(guildRsp)) {
       tamedDino.getAll().then(function(rsp) {
         species.getAll().then(function(speciesRsp) {
