@@ -8,6 +8,7 @@ var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 var helpers = require('../utils/helpers');
 var auth = require('../models/auth');
+var tribeModel = require('../models/tribeModel');
 
 // exports.login = function(req, res) {
 //   loginPromise().then(function(response) {
@@ -16,9 +17,29 @@ var auth = require('../models/auth');
 //   });
 // };
 
+exports.updateUserTribe = function(req, res) {
+  auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
+    if (isAuthorized(guildRsp)) {
+      tribeModel.updateUserTribe(req.body).then(function(rsp) {
+        var data = {
+          tribes: rsp
+        }
+        res.json(data);
+      }, function(err) {
+        res.status(500).send({
+          error: err
+        })
+      });
+    }
+  }, function(err) {
+    res.status(500).send({
+      error: err
+    });
+  });
+}
+
 exports.getTamedDinos = function(req, res) {
   auth.getGuildsPromise(req.query.discordToken).then(function(guildRsp) {
-    console.log(guildRsp);
     if (isAuthorized(guildRsp)) {
       tamedDino.getAll().then(function(rsp) {
         species.getAll().then(function(speciesRsp) {
@@ -125,14 +146,14 @@ exports.addSpecies = function(req, res) {
         species: req.body.species
       }
       species.addSpecies(request).then(function(rsp) {
-          res.json(rsp);
+        res.json(rsp);
       }, function(err) {
         res.status(500).send({
           error: err
         });
       });
     } else {
-       res.redirect(config.tribeManagerApp.url + '/login');
+      res.redirect(config.tribeManagerApp.url + '/login');
     }
   }, function(err) {
     res.status(500).send({
@@ -143,7 +164,6 @@ exports.addSpecies = function(req, res) {
 
 exports.getSpecies = function(req, res) {
   auth.getUserPromise(req.query.discordToken).then(function(userResponse) {
-    console.log(userResponse);
     if (isAuthorized(userResponse)) {
       species.getAll().then(function(rsp) {
         var data = {
@@ -165,9 +185,9 @@ exports.getSpecies = function(req, res) {
   });
 }
 
-exports.addBatchSpecies = function(req, res){
+exports.addBatchSpecies = function(req, res) {
   console.log(req.body);
-  species.addBatchSpecies(req.body).then(function(rsp){
+  species.addBatchSpecies(req.body).then(function(rsp) {
     console.log(rsp);
     res.json(rsp);
   });

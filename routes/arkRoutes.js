@@ -23,6 +23,9 @@ module.exports = function(app) {
     .get(generators.getGenerators)
     .post(generators.addOrUpdateGenerator)
     .put(generators.fillGenerator);
+  
+  app.route('/tribe')
+  .post(dinos.updateUserTribe)
 
   //DISCORD
   app.route('/discord/login')

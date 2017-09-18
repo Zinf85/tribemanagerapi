@@ -25,6 +25,8 @@ exports.getUser = function(request) {
           console.log(err);
           reject(err);
         }
+        console.log("USER")
+        console.log(result);
         console.log('Retrieval successful');
         resolve(result);
       });

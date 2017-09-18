@@ -32,7 +32,6 @@ exports.addBatchSpecies= function(request, user) {
       temp.push(val);
     });
    // var values = [species.name, species.type];
-console.log(temp);
     db.get().query(queries.addBatchSpecies, [temp], function(err, result) {
       if (err) {
         console.log(err);
@@ -49,13 +48,11 @@ console.log(temp);
 exports.getAll = function() {
   var promise = new Promise(function(resolve, reject) {
     db.get().query(queries.getAllSpecies, function(err, result) {
-      console.log(result);
       if (err) {
         console.log(err);
         reject(err);
       }
       console.log('Retrieval successful');
-      console.log(result);
       resolve(result);
     });
   });

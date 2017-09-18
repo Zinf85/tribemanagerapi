@@ -10,6 +10,7 @@ var queries = JSON.parse(fs.readFileSync('queries.json', 'utf8'));
 var config = JSON.parse(fs.readFileSync('config.json'));
 var guild = require('../models/guild');
 var auth = require('../models/auth');
+var tribeModel = require('../models/tribeModel');
 var helpers = require('../utils/helpers');
 var rateDelay = 750;
 
@@ -82,10 +83,8 @@ exports.getGuilds = function(req, res) {
 exports.getUser = function(req, res) {
   var token = req.query.discordToken;
   auth.getGuildsPromise(token).then(function(guildRsp) {
-    console.log(guildRsp);
     setTimeout(function() {
       auth.getUserPromise(token).then(function(userRsp) {
-        console.log(userRsp);
         var userRspObj = JSON.parse(userRsp);
         guild.insertAll(auth.getGuildsRequest(guildRsp)).then(function(guildsRsp) {
           guild.insertUserGuilds(auth.getUserGuildsRequest(userRspObj.id, guildRsp)).then(function(userGuildsRsp) {
@@ -97,9 +96,22 @@ exports.getUser = function(req, res) {
             userModel.getUser(userReq).then(function(dbUserRsp) {
               if (dbUserRsp.length == 1) {
                 user.isSuperUser = dbUserRsp[0].isSuperUser == 1;
+                user.tribeId = dbUserRsp[0].tribeId;
+                user.tribeName = dbUserRsp[0].tribeName;
               }
-
-              res.json(user);
+              
+              tribeModel.getTribes().then(function(tribeRsp){
+                 var data = {
+                user: user,
+                tribes: tribeRsp
+              }
+              res.json(data);
+              }, function(err){
+                 res.status(500).send({
+                error: "Failed to get tribes."
+              });
+              });
+             
             }, function(err) {
               res.status(500).send({
                 error: 'Failed lookup'

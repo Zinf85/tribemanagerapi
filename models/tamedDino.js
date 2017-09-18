@@ -8,7 +8,7 @@ var moment = require('moment');
 exports.addOrUpdate = function(request) {
   var promise = new Promise(function(resolve, reject) {
     var dino = request.dino;
-    var tribeId = request.tribeId;
+    var tribeId = request.user.tribeId;
     var userId = request.user.userId;
     var dinoId = dino.id ? dino.id : guid.create().value;
     var modDate = getModifiedDate();
@@ -36,7 +36,7 @@ exports.addOrUpdate = function(request) {
           console.log(err2);
           reject(err2);
         }
-        console.log(result2);
+        
         resolve(result2);
         
       });
@@ -54,6 +54,7 @@ exports.getAll = function() {
         console.log(err);
         reject(err);
       }
+      console.log(result);
       console.log('Retrieval successful');
       resolve(result);
     });

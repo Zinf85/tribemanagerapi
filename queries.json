@@ -1,8 +1,7 @@
 {
   "dinos": {
     "addTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    "addOrUpdateTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe, status, datemodified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee = ?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, updatedby = ?, tribe = ?, status =?, datemodified = ?",
-    "getAllTamedDinos": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby",
+    "addOrUpdateTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribeId, status, datemodified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee = ?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, updatedby = ?, tribe = ?, status =?, datemodified = ?",
     "getDinoById": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby WHERE TamedDinos.id = ?",
     "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?",
     "insertUser": "INSERT IGNORE INTO Users(userId, username, accessToken, refreshToken) VALUES(?, ?, ?, ?)",
@@ -12,7 +11,7 @@
     "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?",
     "getUsersJoinTamedDinos": "SELECT Users.username, Users.userId FROM Users INNER JOIN TamedDinos On TamedDinos.addedby=Users.userId",
     "addTamedDino": "INSERT INTO TamedDinos (id, name, level, health, stamina, oxygen, food, weight, melee, speed, torpor, species, gender, notes, imprint, father, mother, addedBy, tribe) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    "getAllTamedDinos": "SELECT TamedDinos.*, Users.username FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby",
+    "getAllTamedDinos": "SELECT TamedDinos.*, Users.username, Tribes.tribeName FROM TamedDinos LEFT JOIN Users On Users.userId=TamedDinos.addedby LEFT JOIN Tribes On Tribes.tribeId = TamedDinos.tribeId",
     "updateTamedDino": "UPDATE TamedDinos SET name = ?, level = ?, health = ?, stamina = ?, oxygen = ?, food = ?, weight = ?, melee =?, speed = ?, torpor = ?, species = ?, gender = ?, notes = ?, imprint = ?, father = ?, mother = ?, addedBy = ?, tribe = ? WHERE id = ?"
   },
   "species": {
@@ -38,6 +37,10 @@
     "insertUserGuilds": "INSERT INTO UserGuilds (userId, guildId) VALUES ?",
     "getUserTokens": "SELECT accessToken, refreshToken FROM Users WHERE userId = ?",
     "adminGetUsersGuilds": "SELECT Guilds.guildName, Users.username FROM UserGuilds INNER JOIN Guilds ON UserGuilds.guildId = Guilds.guildId INNER JOIN Users ON UserGuilds.userId = Users.userId",
-    "getUser": "SELECT * FROM Users WHERE userId = ?"
+    "getUser": "SELECT Users.*, Tribes.* FROM Users LEFT JOIN Tribes ON Tribes.tribeId = Users.tribeId WHERE Users.userId = ?",
+    "getTribes": "SELECT * FROM Tribes",
+    "updateUserTribe": "UPDATE Users Set tribeId = ? WHERE userId = ?",
+    "getTribeById": "SELECT * FROM Tribes WHERE tribeId = ?",
+    "addToUserTribes": "INSERT IGNORE INTO UserTribes(tribeId, userId) VALUES(?, ?)"
   }
 }
