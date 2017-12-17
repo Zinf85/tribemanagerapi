@@ -1,13 +1,18 @@
 {
   "tribemanager": {
-    "host": "<db_host_name>",
-    "user": "<db_user_name>",
-    "password": "<db_password>",
-    "database": "<db_name>"
+    "host": "localhost",
+    "user": "arkapp",
+    "password": "<insert_password>",
+    "database": "<database_name>",
+    "guildIds": ["<guild_ids_of_discord_servers>", "<guild_id_2>"]
   },
-  "authService":{
-    "port": "8081",
-    "url": "http://127.0.0.1:8081",
-    "enabled": true
+  "discord": {
+    "clientId": "<discord_bot_clientId>",
+    "clientSecret": "<client_secret_of_discord_bot>",
+    "callbackURL": "<callback_url_from_discord_bot>",
+    "guilds": [{"id": "<guild_ids_of_discord_servers>", "name":"<friendly_name>" }]
+  },
+  "tribeManagerApp": {
+    "url": "<base_url_for_web_app>"
   }
 }
