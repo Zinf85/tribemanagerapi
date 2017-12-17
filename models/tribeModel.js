@@ -37,8 +37,11 @@ exports.updateUserTribe = function(request) {
             console.log(err2);
             reject(err2);
           }
-          console.log('Retrieval successful');
-          resolve(result);
+          db.get().query(queries.getUserTribe, [id], function(err3, result3){
+                  console.log('Retrieval successful');
+          resolve(result3);
+          });
+    
         });
 
       });
